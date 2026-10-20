@@ -1,0 +1,205 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#f6f7fb">
+  <title>Knowledge AI | Document Intelligence</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <a class="brand" href="/">
+        <span class="brand-icon">K</span>
+        <span>Knowledge<span class="brand-light">AI</span></span>
+      </a>
+
+      <div class="side-label">WORKSPACE</div>
+      <button class="nav-item active" data-view="assistant">
+        <span>✳</span> AI Assistant
+      </button>
+      <button class="nav-item" data-view="documents">
+        <span>▤</span> Documents
+      </button>
+      <button class="nav-item" data-view="evaluation">
+        <span>◫</span> Prompt Evaluation
+      </button>
+
+      <div class="sidebar-bottom">
+        <div class="status-dot"></div>
+        <div>
+          <strong>Knowledge engine</strong>
+          <p>Sentence Transformers + ChromaDB</p>
+        </div>
+      </div>
+    </aside>
+
+    <main class="main">
+      <header class="topbar">
+        <div>
+          <p class="eyebrow">YOUR PRIVATE KNOWLEDGE SPACE</p>
+          <h1 id="page-title">AI Knowledge Assistant</h1>
+        </div>
+        
+<div class="top-actions">
+  <button id="theme-toggle" class="theme-toggle"
+          type="button" aria-label="Switch to dark mode"
+          title="Switch theme">
+    <span id="theme-icon">☾</span>
+    <span id="theme-label">Dark mode</span>
+  </button>
+  <div class="top-pill">
+    <span class="status-dot"></span> Local index
+  </div>
+</div>
+
+      </header>
+
+      <section id="assistant-view">
+        <div class="hero">
+          <div class="hero-copy">
+            <span class="hero-tag">DOCUMENT INTELLIGENCE</span>
+            <h2>Answers hidden in your<br><span>documents, discovered.</span></h2>
+            <p>Upload your knowledge, ask better questions, and explore evidence-backed answers powered by semantic search.</p>
+          </div>
+          <div class="hero-art" aria-hidden="true">
+            <div class="art-orbit orbit-one"></div>
+            <div class="art-orbit orbit-two"></div>
+            <div class="art-core">✳</div>
+            <div class="art-node node-one">PDF</div>
+            <div class="art-node node-two">AI</div>
+            <div class="art-node node-three">TXT</div>
+          </div>
+        </div>
+
+        <div class="stats-grid">
+          <div class="stat-card">
+            <span>Indexed documents</span>
+            <strong id="doc-count">—</strong>
+            <small>Available in your workspace</small>
+          </div>
+          <div class="stat-card">
+            <span>Text chunks</span>
+            <strong id="chunk-count">—</strong>
+            <small>Ready for semantic retrieval</small>
+          </div>
+          <div class="stat-card">
+            <span>Retrieval depth</span>
+            <strong>Top 3</strong>
+            <small>Most relevant passages</small>
+          </div>
+        </div>
+
+        <div class="workspace-grid">
+          <section class="panel upload-panel">
+            <div class="panel-heading">
+              <div>
+                <p class="eyebrow">KNOWLEDGE BASE</p>
+                <h3>Add documents</h3>
+              </div>
+              <span class="heading-icon">↥</span>
+            </div>
+            <label class="dropzone" for="file-input">
+              <div class="upload-icon">↑</div>
+              <strong>Drop files or browse</strong>
+              <span>PDF, TXT, MD · Max 15 MB per file</span>
+              <input id="file-input" type="file"
+                accept=".pdf,.txt,.md,.markdown">
+            </label>
+            <div id="upload-status" class="notice" role="status">
+              Five sample documents are indexed automatically.
+            </div>
+            <button id="upload-btn" class="primary-btn full-btn">
+              Upload and index
+            </button>
+          </section>
+
+          <section class="panel ask-panel">
+            <div class="panel-heading">
+              <div>
+                <p class="eyebrow">ASK YOUR KNOWLEDGE</p>
+                <h3>What would you like to know?</h3>
+              </div>
+              <span class="heading-icon">✳</span>
+            </div>
+            <label for="question-input" class="field-label">Your question</label>
+            <textarea id="question-input" rows="3"
+              placeholder="e.g. How does semantic search differ from keyword search?"></textarea>
+
+            <label for="technique-select" class="field-label">Prompting technique</label>
+            <select id="technique-select">
+              <option value="role_based">Role-based · Technical analyst</option>
+              <option value="zero_shot">Zero-shot · Direct instruction</option>
+              <option value="few_shot">Few-shot · Guided examples</option>
+            </select>
+
+            <button id="ask-btn" class="primary-btn full-btn">
+              Generate answer <span>→</span>
+            </button>
+          </section>
+        </div>
+
+        <section class="panel answer-panel">
+          <div class="panel-heading">
+            <div>
+              <p class="eyebrow">RESPONSE & EVIDENCE</p>
+              <h3>Answer workspace</h3>
+            </div>
+            <span id="answer-badge" class="subtle-badge">Waiting for a question</span>
+          </div>
+          <div id="answer-content" class="answer-content">
+            <div class="empty-state">
+              <div class="empty-icon">✳</div>
+              <strong>Your next discovery starts here</strong>
+              <p>Ask a question to receive an answer with supporting document passages.</p>
+            </div>
+          </div>
+          <div id="sources" class="sources"></div>
+        </section>
+      </section>
+
+      <section id="documents-view" class="hidden">
+        <div class="section-intro">
+          <p class="eyebrow">YOUR SOURCE LIBRARY</p>
+          <h2>Documents & indexed chunks</h2>
+          <p>Manage the files available to the retrieval engine.</p>
+        </div>
+        <div class="panel">
+          <div id="document-list" class="document-list">Loading documents...</div>
+        </div>
+      </section>
+
+      <section id="evaluation-view" class="hidden">
+        <div class="section-intro">
+          <p class="eyebrow">PART 1 · PROMPT ENGINEERING</p>
+          <h2>Compare three prompting strategies</h2>
+          <p>Run the same five questions through zero-shot, few-shot and role-based prompts.</p>
+        </div>
+        <div class="evaluation-banner">
+          <div>
+            <strong>15 generated responses</strong>
+            <p>Five questions × three prompting techniques</p>
+          </div>
+          <button id="evaluate-btn" class="primary-btn">Run evaluation →</button>
+        </div>
+        <div id="evaluation-results" class="evaluation-results"></div>
+        <div class="panel rubric">
+          <h3>Evaluation rubric</h3>
+          <p>Score each response from 1–5 using the retrieved evidence and a consistent standard.</p>
+          <div class="rubric-grid">
+            <div><strong>Accuracy</strong><p>Are claims supported by the source documents?</p></div>
+            <div><strong>Clarity</strong><p>Is the answer understandable and well structured?</p></div>
+            <div><strong>Relevance</strong><p>Does it answer the exact question?</p></div>
+          </div>
+          <p class="muted">The best-performing technique should be selected from observed results, not assumed in advance.</p>
+        </div>
+      </section>
+
+      <footer>AI Knowledge Assistant <span>·</span> RAG · Semantic retrieval · Prompt engineering</footer>
+    </main>
+  </div>
+  <script src="/static/script.js"></script>
+</body>
+</html>
